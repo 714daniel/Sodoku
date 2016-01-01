@@ -13,7 +13,7 @@ public class SodokuBruteForceTest {
 
 
 		s.fillGrid(f);
-		System.out.println(getSolutionFinal(s, printSolutions(s)));
+		System.out.println((getSolutionFinal(s, printSolutions(s))));
 		//System.out.println(Arrays.deepToString(s.getSubSquares()));
 	}
 
@@ -26,7 +26,7 @@ public class SodokuBruteForceTest {
 		for (int x = 0; x < s.getLength(); x++) {
 			for (int y = 0; y < s.getLength(); y++) {
 				if (grid[x][y] == 0) {
-				zer.add(x * 10 + y);
+				zer.add(x * 9 + y);
 						for (int tryAll = 1; tryAll <= s.getLength(); tryAll++) {
 						possible[x][y][tryAll] = s.tryWith(x, y, tryAll);
 					}
@@ -56,24 +56,26 @@ public class SodokuBruteForceTest {
 	return solu;
 	}
 
-	public static int[][] getSolutionFinal(SodokuGrid s,java.util.ArrayList<java.util.ArrayList<java.lang.Integer>> solu ) {
+	public static ArrayList<SodokuGrid> getSolutionFinal(SodokuGrid s,java.util.ArrayList<java.util.ArrayList<java.lang.Integer>> solu ) {
 
 
-
-		return getRecSolution(s, solu, 0);
+	ArrayList<SodokuGrid> s1 = new ArrayList <SodokuGrid>();
+		return getRecSolution(s, solu, 0, s1);
 	}
 
-	public static int[][] getRecSolution(SodokuGrid s,ArrayList<ArrayList<Integer>> solu, int zeroInd) {
+	public static ArrayList<SodokuGrid> getRecSolution(SodokuGrid s,ArrayList<ArrayList<Integer>> solu, int zeroInd, ArrayList<SodokuGrid> s1      ) {
 		if(zeroInd == solu.size()) {
-				return s.getGrid();
+				System.out.println("yes");
+					return s1;
 			}
+		ArrayList<Integer> newPos = new ArrayList<Integer>();
 		for(Integer i:solu.get(zeroInd)) {
-			if (s.tryWith(zer.get(zeroInd / 10), zer.get(zeroInd % 10), i)) {
+			if (s.tryWith(zer.get(zeroInd) & 9, zer.get(zeroInd) / 9, i)) {
 				System.out.println(zeroInd);
-				getRecSolution(s.setTo(zer.get(zeroInd / 10), zer.get(zeroInd % 10), i), solu, zeroInd++);
+			newPos.add(i);
 			}
 		}
-		return null;
+		return 	s1.addAll(getRecSolution(s.setTo(zer.get(zeroInd) % 9, zer.get(zeroInd) / 9, i), solu, zeroInd, s1));;
 	}
 
 }
